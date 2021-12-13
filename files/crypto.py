@@ -17,18 +17,17 @@ class Crypto():
             self.original_ascii, self.mixed_ascii)
         self.decoded_quote = self.quote_generator.get_random_quote()
         self.encoded_quote = self.do_encoding(self.decoded_quote)
-        self.decoded_quote = 'dk'
-        self.encoded_quote = ['D', 'K']
 
-        # self.quote_dict = {test_list[i]: 0 for i in range(len(test_list))}
-        self.quote_dict = {
-            self.encoded_quote[i]: 0 for i in range(len(self.encoded_quote))}
+        # For testing
+        # self.decoded_quote = 'dk'
+        # self.encoded_quote = ['D', 'K']
+
         self.quote_guessed = []
         for letter in self.encoded_quote:
             if letter.isalpha():
                 self.quote_guessed.append("_")
             else:
-                self.quote_guessed.append(" ")
+                self.quote_guessed.append(letter)
 
     def change_guessed_alphabet(self, from_letter, to_letter):
         if to_letter.strip() == "":
@@ -39,29 +38,41 @@ class Crypto():
                 from_letter.upper())] = to_letter.upper()
 
     def change_guessed_quote(self, from_letter, to_letter):
-        letters_to_change = []
         for i in range(len(self.encoded_quote)):
             if self.encoded_quote[i] == from_letter.upper():
-                letters_to_change.append(i)
-        for i in letters_to_change:
-            if to_letter.strip() == "":
-                self.quote_guessed[i] = "_"
-            else:
-                self.quote_guessed[i] = to_letter.upper()
+                if to_letter.strip() == "":
+                    self.quote_guessed[i] = "_"
+                else:
+                    self.quote_guessed[i] = to_letter.upper()
 
     def fix_guessed_quote(self):
         for i in range(len(self.encoded_quote)):
             if self.quote_guessed[i].isalpha():
                 self.quote_guessed[i] = self.decoded_quote[i].upper()
-                self.change_guessed_alphabet(self.quote_guessed[i], self.decoded_quote[i])
+                self.change_guessed_alphabet(
+                    self.quote_guessed[i], self.decoded_quote[i])
+        self.is_game_over()
+
+    def get_hint(self):
+        rand_index = choice(
+            [i for i in range(len(self.quote_guessed)) if self.quote_guessed[i] == "_"])
+        self.guess_letter(
+            self.encoded_quote[rand_index], self.encoded_quote[rand_index])
+        self.hint_count += 1
 
     def is_letter_in_code(self, from_letter):
-        if from_letter.upper() not in self.quote_dict:
+        if from_letter.upper() not in self.encoded_quote:
             raise InvalidLetterGuessException(
                 f'{from_letter.upper()} is not a a valid letter')
 
+    def is_letter_already_guessed(self, to_letter):
+        if to_letter.upper() in self.quote_guessed:
+            raise InvalidLetterGuessException(
+                f'{to_letter.upper()} is a letter that\'s already been guessed')
+
     def guess_letter(self, from_letter, to_letter):
         self.is_letter_in_code(from_letter)
+        self.is_letter_already_guessed(to_letter)
         self.change_guessed_alphabet(from_letter, to_letter)
         self.change_guessed_quote(from_letter, to_letter)
         self.is_game_over()

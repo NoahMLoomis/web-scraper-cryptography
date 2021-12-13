@@ -5,5 +5,12 @@ class InvalidLetterGuessException(BaseException):
 class EndGameException(BaseException):
     pass
 
+
 class FixingQuoteException(BaseException):
+    pass
+
+class GiveHintException(BaseException):
+    pass
+
+class QuitGameException(BaseException):
     pass
