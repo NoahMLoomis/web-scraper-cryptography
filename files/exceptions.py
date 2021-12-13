@@ -4,3 +4,6 @@ class InvalidLetterGuessException(BaseException):
 
 class EndGameException(BaseException):
     pass
+
+class FixingQuoteException(BaseException):
+    pass
