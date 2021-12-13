@@ -56,6 +56,7 @@ class Cli():
     def restart_game(self):
         self.crypto = Crypto()
 
+
 if __name__ == "__main__":
     cli = Cli()
     print("\nWelcome to the Cryptographers crypto conundrum, enter q to quit!!!")

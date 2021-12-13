@@ -9,8 +9,10 @@ class EndGameException(BaseException):
 class FixingQuoteException(BaseException):
     pass
 
+
 class GiveHintException(BaseException):
     pass
+
 
 class QuitGameException(BaseException):
     pass
