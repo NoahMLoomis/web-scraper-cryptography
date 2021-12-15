@@ -20,7 +20,7 @@ class Cli():
 
     def display_encoded_quote(self):
         # The following line is for testing, to see what your quote is as you're decoding it
-        print(" ".join(self.crypto.decoded_quote))
+        # print(" ".join(self.crypto.decoded_quote))
         print(Fore.GREEN + " ".join(self.crypto.encoded_quote))
         print(Fore.GREEN + " " .join(self.crypto.quote_guessed), end='\n\n\n')
 
@@ -91,10 +91,10 @@ if __name__ == "__main__":
         cli.display_encoded_quote()
 
         try:
-            from_letter = input("Convert letter: ")
+            from_letter = input(f"{Fore.MAGENTA}Convert letter: ")
             cli.handle_input(from_letter)
 
-            to_letter = input("To letter: ")
+            to_letter = input(f"To letter: ")
             cli.handle_input(to_letter)
 
             if not cli.is_command(from_letter) and not cli.is_command(to_letter):
