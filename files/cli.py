@@ -20,16 +20,39 @@ class Cli():
 
     def display_encoded_quote(self):
         # The following line is for testing, to see what your quote is as you're decoding it
-        # print(" ".join(self.crypto.decoded_quote))
+        print(" ".join(self.crypto.decoded_quote))
         print(Fore.GREEN + " ".join(self.crypto.encoded_quote))
         print(Fore.GREEN + " " .join(self.crypto.quote_guessed), end='\n\n\n')
+
+    def display_errors_in_quote(self):
+        bad_letters = []
+        for i in range(len(self.crypto.quote_guessed)):
+            if self.crypto.quote_guessed[i].isalpha():
+                if self.crypto.quote_guessed[i] != self.crypto.decoded_quote[i].upper():
+                    bad_letters.append(
+                        (self.crypto.encoded_quote[i], self.crypto.quote_guessed[i]))
+
+        if len(list(set(bad_letters))) > 0:
+            print(f'{Fore.RED}The following letters are incorrectly guessed: ')
+            for encoded_letter, guessed_letter in list(set(bad_letters)):
+                print(
+                    f'{Fore.RED}{encoded_letter} is not {guessed_letter}')
+            print("hint hint - enter \'!!\' if you want to fix your mistakes")
+        else:
+            print(f'{Fore.GREEN}No Errors found for letters guessed')
 
     def handle_input(self, letters):
         if letters.lower().strip() == 'quit':
             raise QuitGameException()
+
         elif letters.lower().strip() == '!':
+            self.display_errors_in_quote()
+            raise FixingQuoteException()
+
+        elif letters.lower().strip() == '!!':
             self.crypto.fix_guessed_quote()
             raise FixingQuoteException("Fixing quote")
+
         elif letters.lower().strip() == '?':
             if self.crypto.hint_count >= 1:
                 raise InvalidLetterGuessException(
@@ -38,7 +61,7 @@ class Cli():
             raise GiveHintException("Hint given")
 
     def is_command(self, letter):
-        if letter.lower().strip() == "quit" or letter.lower().strip() == "?" or letter.lower().strip() == "!":
+        if letter.lower().strip() == "quit" or letter.lower().strip() == "?" or letter.lower().strip() == "!" or letter.lower().strip() == "!!":
             return True
         return False
 
@@ -50,7 +73,8 @@ class Cli():
               Commands:
                 quit - quit
                 ? - hint (only 1)
-                ! - fix mistakes
+                ! - see mistakes
+                !! - fix mistakes
               """)
 
     def restart_game(self):

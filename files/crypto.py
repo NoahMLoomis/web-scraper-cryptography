@@ -19,8 +19,8 @@ class Crypto():
         self.encoded_quote = self.do_encoding(self.decoded_quote)
 
         # For testing
-        # self.decoded_quote = 'dk'
-        # self.encoded_quote = ['D', 'K']
+        # self.decoded_quote = 'dog\'s are cool'
+        # self.encoded_quote = ['D', 'O', 'G', '\'', 'S', ' ', 'A', 'R', 'E', ' ', 'C', 'O', 'O', 'L']
 
         self.quote_guessed = []
         for letter in self.encoded_quote:
@@ -44,20 +44,19 @@ class Crypto():
                     self.quote_guessed[i] = "_"
                 else:
                     self.quote_guessed[i] = to_letter.upper()
-
+                    
     def fix_guessed_quote(self):
         for i in range(len(self.encoded_quote)):
             if self.quote_guessed[i].isalpha():
+                self.alphabet_guessed[self.original_ascii.index(self.encoded_quote[i])] = self.decoded_quote[i]
                 self.quote_guessed[i] = self.decoded_quote[i].upper()
-                self.change_guessed_alphabet(
-                    self.quote_guessed[i], self.decoded_quote[i])
         self.is_game_over()
 
     def get_hint(self):
         rand_index = choice(
             [i for i in range(len(self.quote_guessed)) if self.quote_guessed[i] == "_"])
         self.guess_letter(
-            self.encoded_quote[rand_index], self.encoded_quote[rand_index])
+            self.encoded_quote[rand_index], self.decoded_quote[rand_index])
         self.hint_count += 1
 
     def is_letter_in_code(self, from_letter):
@@ -89,7 +88,6 @@ class Crypto():
     def get_quote_letters(self):
         return [self.encoded_quote[i] for i in range(len(self.encoded_quote)) if self.encoded_quote[i].isalpha()]
 
-    # Try to improve this, not very robust
     def is_game_over(self):
         if "_" not in self.quote_guessed:
             raise EndGameException("Game is over")
