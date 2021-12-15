@@ -131,4 +131,4 @@ if __name__ == "__main__":
                     print(f'{Fore.BLUE}Thanks for playing :)')
                     break
             else:
-                print(f'{Fore.RED}You didn\'t guess everything right')
+                print(f'{Fore.RED}You didn\'t guess everything right\nIf you want to correct your mistakes, enter \'!!\'')
